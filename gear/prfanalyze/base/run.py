@@ -85,7 +85,7 @@ try:
         rows = [{k:v for (k,v) in zip(l0,r)} for r in rr]
 except Exception:
     die("Could not load events file: %s" % events_file)
-stim_file = set([r['stim_file'] for r in rows])
+stim_file = {r['stim_file'] for r in rows}
 if len(stim_file) != 1:
     die("Multiple stimulus files found in events file (%s)" % events_file)
 stim_file = os.path.join(bids_dir, 'stimuli', list(stim_file)[0])
@@ -170,7 +170,7 @@ for flnm in os.listdir(func_dir):
             os.wait()
     except Exception:
         die("Failed to exec /solve.sh script!")
-    
+
     nii_base = nib.load(bold_image)
     # If there are things to cleanup we do that; specifically, the estimates.json file:
     estfl = os.path.join(bids_link, 'estimates.json')
@@ -197,7 +197,7 @@ for flnm in os.listdir(func_dir):
     resflo = os.path.join(bids_link, 'run-%s_results.mat' % (runid,))
     if os.path.isfile(resfli): os.rename(resfli, resflo)
     processed += 1
-    
+
 if processed == 0: die("No BOLD images found!")
 
 # exit happily
